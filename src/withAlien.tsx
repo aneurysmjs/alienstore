@@ -10,10 +10,10 @@ function WithAlien<P extends object>(
   Component: ComponentType<P>,
   reduxModules: Array<() => Promise<ReduxModule<P>>>,
 ): ReactElement<P & WithAlienProps> | null {
-  const AlienModule = useAlien(reduxModules);
+  const alienModules = useAlien(reduxModules);
 
-  if (AlienModule.length > 0) {
-    return <Component {...({ modules: AlienModule } as P)} />;
+  if (alienModules.length > 0) {
+    return <Component {...({ modules: alienModules } as P)} />;
   }
 
   return null;
