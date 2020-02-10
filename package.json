@@ -1,8 +1,8 @@
 {
-"name": "alienstore",
-"version": "0.0.0-development",
-"repository": "git@github.com:aneurysmjs/alienstore.git",
-"author": "jero <aneurysmjs@outlook.com>",
+  "name": "alienstore",
+  "version": "0.0.0-development",
+  "repository": "git@github.com:aneurysmjs/alienstore.git",
+  "author": "jero <aneurysmjs@outlook.com>",
   "license": "MIT",
   "scripts": {
     "clean": "./node_modules/.bin/rimraf dist es",
@@ -76,8 +76,9 @@
   },
   "peerDependencies": {
     "react": "16.9.0",
-    "react-redux": "7.1.3",
     "redux": "4.0.5"
   },
-  "dependencies": {}
+  "dependencies": {
+    "react-redux": "7.1.3"
+  }
 }
