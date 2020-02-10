@@ -13,6 +13,7 @@ const external = [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.pee
 const globals = {
   redux: 'redux',
   react: 'React',
+  'react-dom': 'ReactDOM',
   'react-redux': 'ReactRedux'
 }
 
