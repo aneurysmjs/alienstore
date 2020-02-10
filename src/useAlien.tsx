@@ -33,7 +33,7 @@ function errorHandler<T>(errorOrObj: T): T {
 
 function useAlien<T>(
   reduxImports: Array<() => Promise<ReduxModule<T>>>,
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/no-empty-function
   cb: () => void = () => {},
 ): Array<AlienModule<T>> {
   const store = useStore() as AlienStore;
