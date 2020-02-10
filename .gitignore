@@ -108,3 +108,7 @@ dist
 
 # VS Code
 .vscode
+
+dist
+lib
+es
