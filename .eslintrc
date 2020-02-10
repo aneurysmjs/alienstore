@@ -44,6 +44,10 @@
         "devDependencies": true
       }
     ],
-    "import/extensions": "off"
+    "import/extensions": "off",
+    "import/no-unresolved": [
+      2, 
+      { "caseSensitive": false }
+   ]
   }
 }
