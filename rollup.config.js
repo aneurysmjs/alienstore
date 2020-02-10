@@ -8,7 +8,13 @@ import pkg from './package.json';
 
 const noDeclarationFiles = { compilerOptions: { declaration: false } };
 
-const external = [...Object.keys(pkg.peerDependencies || {})];
+const external = [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})];
+
+const globals = {
+  redux: 'redux',
+  react: 'React',
+  'react-redux': 'ReactRedux'
+}
 
 export default [
   // ES
@@ -35,7 +41,10 @@ export default [
   // ES for Browsers
   {
     input: 'src/index.ts',
-    output: { file: 'es/alienStore.mjs', format: 'es', indent: false },
+    output: { 
+      file: 'es/alienStore.mjs', 
+      format: 'es', indent: false
+     },
     external,
     plugins: [
       commonjs({
@@ -68,9 +77,7 @@ export default [
       format: 'umd',
       name: 'alienStore',
       indent: false,
-      globals: {
-        react: 'React',
-      },
+      globals,
     },
     external,
     plugins: [
@@ -97,9 +104,7 @@ export default [
       format: 'umd',
       name: 'alienStore',
       indent: false,
-      globals: {
-        react: 'React',
-      },
+      globals,
     },
     external,
     plugins: [

@@ -78,7 +78,7 @@ function errorHandler(errorOrObj) {
     return errorOrObj;
 }
 function useAlien(reduxImports, 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/no-empty-function
 cb = () => { }) {
     const store = useStore();
     const { alienManager: { injectReducers, rootReducer }, } = store;
@@ -118,9 +118,9 @@ cb = () => { }) {
 }
 
 function WithAlien(Component, reduxModules) {
-    const AlienModule = useAlien(reduxModules);
-    if (AlienModule.length > 0) {
-        return React.createElement(Component, Object.assign({}, { modules: AlienModule }));
+    const alienModules = useAlien(reduxModules);
+    if (alienModules.length > 0) {
+        return React.createElement(Component, Object.assign({}, { modules: alienModules }));
     }
     return null;
 }
