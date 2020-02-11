@@ -1,26 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Reducer, AnyAction, ActionCreator } from 'redux';
 import { useStore } from 'react-redux';
 
 import { AlienStore } from './alien';
 
 import errorHandler from './utils/errorHandler';
 
-export interface ReduxModule<S = {}> {
-  id: string;
-  reducers: {
-    [K: string]: Reducer<S>;
-  };
-  actions: {
-    [K: string]: ActionCreator<AnyAction>;
-  };
-  selectors?: {
-    [K: string]: <S, R>(state: S) => R;
-  };
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AlienModule<S = any> = Omit<ReduxModule<S>, 'reducers'>;
+import { ReduxModule, AlienModule } from './types/alienStore';
 
 function useAlien<T>(
   reduxImports: Array<() => Promise<ReduxModule<T>>>,
