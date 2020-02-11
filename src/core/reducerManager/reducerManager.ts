@@ -59,7 +59,6 @@ export default function manager<State>(initialReducers?: State): ReducerManager<
     let tempState = state;
     if (keysToRemove.length > 0) {
       tempState = { ...state };
-      // eslint-disable-next-line no-restricted-syntax
       for (let i = 0; i < keysToRemove.length; i += 1) {
         delete tempState[keysToRemove[i]];
       }
