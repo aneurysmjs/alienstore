@@ -4,6 +4,8 @@ import { useStore } from 'react-redux';
 
 import { AlienStore } from './alien';
 
+import errorHandler from './utils/errorHandler';
+
 export interface ReduxModule<S = {}> {
   id: string;
   reducers: {
@@ -19,17 +21,6 @@ export interface ReduxModule<S = {}> {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AlienModule<S = any> = Omit<ReduxModule<S>, 'reducers'>;
-
-function errorHandler<T>(errorOrObj: T): T {
-  if (errorOrObj) {
-    // rejection from `import()` for some reason is not and instance of Error
-    // that's why the "Object.getPrototypeOf(errorOrObj).name"
-    if (errorOrObj instanceof Error || Object.getPrototypeOf(errorOrObj).name === 'Error') {
-      throw new Error(`useAlienModule ${errorOrObj}`);
-    }
-  }
-  return errorOrObj;
-}
 
 function useAlien<T>(
   reduxImports: Array<() => Promise<ReduxModule<T>>>,
