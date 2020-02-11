@@ -12,8 +12,8 @@ import {
   reduxModuleNoReducers,
   reduxModuleA,
   reduxModuleB,
-} from './helpers/modules';
-import { withProvider, WrapperType } from './helpers/withProvider';
+} from './utils/modules';
+import { withProvider, WrapperType } from './utils/withProvider';
 
 const WRONG_COMPONENT_PATH = './some/wrong/component/path';
 

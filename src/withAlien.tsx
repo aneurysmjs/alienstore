@@ -1,6 +1,7 @@
 import React, { ReactElement, ComponentType } from 'react';
 
-import useAlien, { AlienModule, ReduxModule } from './useAlien';
+import useAlien from './useAlien';
+import { ReduxModule, AlienModule } from './types/alienStore';
 
 interface WithAlienProps {
   modules: Array<AlienModule>;

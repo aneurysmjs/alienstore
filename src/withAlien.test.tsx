@@ -6,8 +6,8 @@ import alien from './alien';
 
 import withAlien from './withAlien';
 
-import { reduxModule } from './helpers/modules';
-import { withProvider, WrapperType } from './helpers/withProvider';
+import { reduxModule } from './utils/modules';
+import { withProvider, WrapperType } from './utils/withProvider';
 
 let store = {} as Store;
 

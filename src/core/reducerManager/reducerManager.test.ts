@@ -3,7 +3,7 @@ import { createStore } from 'redux';
 
 import manager from './reducerManager';
 
-import { initialReducer, reducer1, reducer2 } from '../../helpers/reducers';
+import { initialReducer, reducer1, reducer2 } from '../../utils/reducers';
 
 describe('manager', () => {
   it('should return an alienManager', () => {
