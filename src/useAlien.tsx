@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import { useEffect, useState } from 'react';
 import { useStore } from 'react-redux';
+import useLazy from 'uselazy';
 
 import { AlienStore } from './alien';
 
@@ -7,25 +9,18 @@ import errorHandler from './utils/errorHandler';
 
 import { ReduxModule, AlienModule } from './types/alienStore';
 
-function useAlien<T>(
-  reduxImports: Array<() => Promise<ReduxModule<T>>>,
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type, @typescript-eslint/no-empty-function
-  cb: () => void = () => {},
-): Array<AlienModule<T>> {
+function useAlien<T>(reduxImports: Array<() => Promise<ReduxModule<T>>>): Array<AlienModule<T>> {
   const store = useStore() as AlienStore;
   const {
     alienManager: { injectReducers, rootReducer },
   } = store;
   const [alien, setAlien] = useState<Array<AlienModule<T>> | []>([]);
+  const { result } = useLazy(reduxImports);
 
   useEffect(() => {
-    (async (): Promise<void> => {
+    if (result) {
       try {
-        const promises = reduxImports.map(reduxImport => reduxImport());
-
-        const reduxModules = await Promise.all(promises);
-
-        const result = reduxModules.map(({ id, reducers, ...rest }) => {
+        const alienModules = result.map(({ id, reducers, ...rest }) => {
           if (id == null || id === '') {
             throw new Error('Redux Module has no id');
           }
@@ -46,15 +41,12 @@ function useAlien<T>(
           };
         });
 
-        setAlien([...alien, ...result]);
-      } catch (err) {
-        setAlien(err);
+        setAlien(prevAlienModules => [...prevAlienModules, ...alienModules]);
+      } catch (error) {
+        setAlien(error);
       }
-    })();
-
-    return (): void => cb();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    }
+  }, [result, store, injectReducers, rootReducer]);
 
   return errorHandler(alien);
 }
