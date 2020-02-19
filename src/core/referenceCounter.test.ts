@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import referenceCounter from './referenceCounter';
 
 describe('reference counter', () => {
@@ -8,6 +9,10 @@ describe('reference counter', () => {
   const objA = {
     prop: 1,
   };
+
+  // const objB = {
+  //   prop: 99,
+  // };
 
   describe('reference counter methods', () => {
     const refCounter = referenceCounter();
@@ -53,6 +58,15 @@ describe('reference counter', () => {
       const countObjA = rm.getCount(objA);
       expect(countObjA).toBe(4);
     });
+
+    it.each([[1, 'a', 'Invalid value used as weak map key']])(
+      'should throw when adding non-keyed objects',
+      (input, expected) => {
+        const rm = referenceCounter();
+        // @ts-ignore
+        expect(() => rm.add(input)).toThrowError(expected);
+      },
+    );
   });
 
   describe('"remove" method', () => {
