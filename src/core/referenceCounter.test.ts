@@ -1,17 +1,7 @@
 import referenceCounter from './referenceCounter';
 
 describe('reference counter', () => {
-  describe('referenceCounter', () => {
-    const refCounter = referenceCounter();
-    it('should have "add", "remove" and "getCount" methods', () => {
-      expect(refCounter).toHaveProperty('add');
-      expect(refCounter).toHaveProperty('remove');
-      expect(refCounter).toHaveProperty('getCount');
-      expect(refCounter).toHaveProperty('has');
-    });
-  });
-
-  interface ObjA {
+  interface ObjTest {
     id: string;
   }
 
@@ -19,40 +9,66 @@ describe('reference counter', () => {
     prop: 1,
   };
 
-  const arrayA = [(): Promise<ObjA> => Promise.resolve({ id: 'a' })];
-
-  it('should tell wheter or not a reference already extist', () => {
-    const rm = referenceCounter();
-
-    expect(rm.has(arrayA)).toBe(false);
-
-    rm.add(arrayA);
-
-    expect(rm.has(arrayA)).toBe(true);
+  describe('reference counter methods', () => {
+    const refCounter = referenceCounter();
+    it('should have "has", "add", "remove" and "getCount" methods', () => {
+      expect(refCounter).toHaveProperty('has');
+      expect(refCounter).toHaveProperty('add');
+      expect(refCounter).toHaveProperty('remove');
+      expect(refCounter).toHaveProperty('getCount');
+    });
   });
 
-  it('should add a refence', () => {
-    const rm = referenceCounter();
-    rm.add(objA);
-    rm.add(objA);
-    rm.add(objA);
-    rm.add(objA);
-    const countObjA = rm.getCount(objA);
-    expect(countObjA).toBe(4);
+  describe('"has" method', () => {
+    const promiseObjA = (): Promise<ObjTest> => Promise.resolve({ id: 'a' });
+    const promiseObjB = (): Promise<ObjTest> => Promise.resolve({ id: 'b' });
+
+    const arrayA = [promiseObjA, promiseObjB];
+    const arrayB = [promiseObjB];
+
+    it('should tell wheter or not a reference already extist', () => {
+      const rm = referenceCounter();
+
+      expect(rm.has(arrayA)).toBe(false);
+
+      rm.add(arrayA);
+
+      expect(rm.has(arrayA)).toBe(true);
+
+      expect(rm.has(arrayB)).toBe(false);
+
+      rm.add(arrayB);
+
+      expect(rm.has(arrayB)).toBe(true);
+    });
   });
 
-  it('should remove a refence', () => {
-    const rm = referenceCounter();
-    rm.add(objA);
-    rm.add(objA);
-    rm.add(objA);
-    rm.add(objA);
+  describe('"add" method', () => {
+    it('should add a refence', () => {
+      const rm = referenceCounter();
+      rm.add(objA);
+      rm.add(objA);
+      rm.add(objA);
+      rm.add(objA);
+      const countObjA = rm.getCount(objA);
+      expect(countObjA).toBe(4);
+    });
+  });
 
-    rm.remove(objA);
-    rm.remove(objA);
-    rm.remove(objA);
-    rm.remove(objA);
-    const countObjA = rm.getCount(objA);
-    expect(countObjA).toBe(0);
+  describe('"remove" method', () => {
+    it('should remove a refence', () => {
+      const rm = referenceCounter();
+      rm.add(objA);
+      rm.add(objA);
+      rm.add(objA);
+      rm.add(objA);
+
+      rm.remove(objA);
+      rm.remove(objA);
+      rm.remove(objA);
+      rm.remove(objA);
+      const countObjA = rm.getCount(objA);
+      expect(countObjA).toBe(0);
+    });
   });
 });
