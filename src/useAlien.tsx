@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useStore } from 'react-redux';
 import useLazy from 'uselazy';
 
+import isNil from './utils/isNil';
+
 import { AlienStore } from './alien';
 
 import errorHandler from './utils/errorHandler';
@@ -25,7 +27,7 @@ function useAlien<T>(reduxImports: Array<() => Promise<ReduxModule<T>>>): Array<
             throw new Error('Redux Module has no id');
           }
 
-          if (reducers == null || reducers === undefined || Object.keys(reducers).length === 0) {
+          if (isNil(reducers) || Object.keys(reducers).length === 0) {
             throw new Error('Redux Module has no reducers');
           }
           // is safe here to iterate reducers's keys for reducer injection
