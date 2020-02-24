@@ -1,15 +1,30 @@
 import isNil from '../utils/isNil';
 
 interface ReferenceCounter {
+  /**
+   * @desc Checks if the object exists
+   * @param {T} obj
+   */
   has<T extends object>(obj: T): boolean;
+  /**
+   * @desc Retrieves obj's count for given T.
+   * @param {T} obj
+   */
   getCount<T extends object>(obj: T): number;
+  /**
+   * @desc Adds an object reference and increments the counter.
+   * @param {T} obj
+   */
   add<T extends object>(obj: T): void;
+  /**
+   * @desc Removes an object reference and decrements the counter.
+   * @param {T} obj
+   */
   remove<T extends object>(obj: T): boolean;
 }
 
 export default function referenceCounter(): ReferenceCounter {
   const cache = new WeakMap();
-
   return {
     has(obj): boolean {
       return cache.has(obj);
@@ -37,6 +52,7 @@ export default function referenceCounter(): ReferenceCounter {
         cache.set(obj, (objCount += 1));
       }
     },
+
     remove(obj): boolean {
       const item = cache.has(obj);
 

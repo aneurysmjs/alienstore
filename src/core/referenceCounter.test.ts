@@ -10,10 +10,6 @@ describe('reference counter', () => {
     prop: 1,
   };
 
-  // const objB = {
-  //   prop: 99,
-  // };
-
   describe('reference counter methods', () => {
     const refCounter = referenceCounter();
     it('should have "has", "add", "remove" and "getCount" methods', () => {
@@ -31,7 +27,7 @@ describe('reference counter', () => {
     const arrayA = [promiseObjA, promiseObjB];
     const arrayB = [promiseObjB];
 
-    it('should tell wheter or not a reference already extist', () => {
+    it('should tell wheter or not a reference already exist', () => {
       const rm = referenceCounter();
 
       expect(rm.has(arrayA)).toBe(false);
