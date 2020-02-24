@@ -4,21 +4,25 @@ interface ReferenceCounter {
   /**
    * @desc Checks if the object exists
    * @param {T} obj
+   * @returns boolean
    */
   has<T extends object>(obj: T): boolean;
   /**
    * @desc Retrieves obj's count for given T.
    * @param {T} obj
+   * @returns boolean
    */
   getCount<T extends object>(obj: T): number;
   /**
    * @desc Adds an object reference and increments the counter.
    * @param {T} obj
+   * @returns boolean
    */
   add<T extends object>(obj: T): void;
   /**
    * @desc Removes an object reference and decrements the counter.
    * @param {T} obj
+   * @returns boolean
    */
   remove<T extends object>(obj: T): boolean;
 }

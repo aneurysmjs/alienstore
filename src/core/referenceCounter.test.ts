@@ -73,12 +73,19 @@ describe('reference counter', () => {
       rm.add(objA);
       rm.add(objA);
 
-      rm.remove(objA);
-      rm.remove(objA);
-      rm.remove(objA);
-      rm.remove(objA);
-      const countObjA = rm.getCount(objA);
-      expect(countObjA).toBe(0);
+      expect(rm.getCount(objA)).toBe(4);
+
+      expect(rm.remove(objA)).toBe(false);
+      expect(rm.remove(objA)).toBe(false);
+      expect(rm.remove(objA)).toBe(false);
+      // should be true when all references had been deleted
+      expect(rm.remove(objA)).toBe(true);
+
+      expect(rm.getCount(objA)).toBe(0);
+      // returns false when trying to delete a non-existing reference
+      expect(rm.remove(objA)).toBe(false);
+      // and still be zero
+      expect(rm.getCount(objA)).toBe(0);
     });
   });
 });
