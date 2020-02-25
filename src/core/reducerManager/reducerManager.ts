@@ -38,16 +38,23 @@ export default function manager<State>(initialReducers?: State): ReducerManager<
     // @ts-ignore "combineReducers" doesn't have that overload match
     combinedReducer = combineReducers(reducerMap);
     if (dispatch) {
-      dispatch({ type: '@@ALIEN_STORE/RELOAD' });
+      dispatch({ type: '@@ALIEN_STORE/REDUCER_INJECTED' });
     }
   }
 
   function removeReducers(key: string): void {
     if (!key || !reducerMap[key]) {
+      if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
+        console.warn(`trying to remove a non-existing reducer: ${key}`);
+      }
       return;
     }
-
     delete reducerMap[key];
+
+    if (dispatch) {
+      dispatch({ type: '@@ALIEN_STORE/REDUCER_REMOVED' });
+    }
 
     keysToRemove.push(key);
     // @ts-ignore "combineReducers" doesn't have that overload match

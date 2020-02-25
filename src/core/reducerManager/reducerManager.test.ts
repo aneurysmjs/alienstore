@@ -5,6 +5,8 @@ import manager from './reducerManager';
 
 import { initialReducer, reducer1, reducer2 } from '../../utils/reducers';
 
+import { ReducerManager } from '../../types/managers';
+
 describe('manager', () => {
   it('should return an alienManager', () => {
     const alienManager = manager();
@@ -32,8 +34,22 @@ describe('manager', () => {
   });
 
   describe('injectReducers', () => {
+    let alienManager = {} as ReducerManager;
+
+    beforeEach(() => {
+      alienManager = manager();
+    });
+
     it('should inject a new reducer', () => {
-      const { getReducerMap, injectReducers } = manager();
+      const actionsDispatched: Array<string> = [];
+
+      // highjack 'dispatch' to track actions calls
+      alienManager.setDispatch(action => {
+        actionsDispatched.push(action.type);
+        return action.payload || null;
+      });
+
+      const { getReducerMap, injectReducers } = alienManager;
       const initReducerMap = getReducerMap();
 
       expect(initReducerMap).toStrictEqual({});
@@ -54,6 +70,11 @@ describe('manager', () => {
         reducer1,
         reducer2,
       });
+
+      expect(actionsDispatched).toEqual([
+        '@@ALIEN_STORE/REDUCER_INJECTED',
+        '@@ALIEN_STORE/REDUCER_INJECTED',
+      ]);
     });
   });
 
@@ -63,8 +84,21 @@ describe('manager', () => {
       state2: reducer2,
     };
 
+    let alienManager = {} as ReducerManager<typeof someInitialReducer>;
+
+    beforeEach(() => {
+      alienManager = manager(someInitialReducer);
+    });
+
     it('should remove a reducer based on its key', () => {
-      const { getReducerMap, removeReducers } = manager(someInitialReducer);
+      const actionsDispatched: Array<string> = [];
+
+      alienManager.setDispatch(action => {
+        actionsDispatched.push(action.type);
+        return action.payload || null;
+      });
+
+      const { getReducerMap, removeReducers } = alienManager;
       const reducerMap = getReducerMap();
 
       expect(reducerMap).toStrictEqual(someInitialReducer);
@@ -76,10 +110,15 @@ describe('manager', () => {
       removeReducers('state2');
 
       expect(reducerMap).toStrictEqual({});
+
+      expect(actionsDispatched).toEqual([
+        '@@ALIEN_STORE/REDUCER_REMOVED',
+        '@@ALIEN_STORE/REDUCER_REMOVED',
+      ]);
     });
 
     it('should not remove a reducer if the key does not exist on the reducerMap', () => {
-      const { getReducerMap, removeReducers } = manager(someInitialReducer);
+      const { getReducerMap, removeReducers } = alienManager;
       const reducerMap = getReducerMap();
 
       expect(reducerMap).toStrictEqual(someInitialReducer);
