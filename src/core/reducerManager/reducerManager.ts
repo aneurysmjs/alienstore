@@ -2,6 +2,7 @@
 import { AnyAction, combineReducers, Dispatch, Reducer } from 'redux';
 
 import { FullStoreShape, ReducerMapper } from '../../types/alienStore';
+import { REDUCER_INJECTED, REDUCER_REMOVED } from '../../types/actionTypes';
 import { ReducerManager } from '../../types/managers';
 
 type AlienDispatch = Dispatch<AnyAction> | null;
@@ -38,7 +39,7 @@ export default function manager<State>(initialReducers?: State): ReducerManager<
     // @ts-ignore "combineReducers" doesn't have that overload match
     combinedReducer = combineReducers(reducerMap);
     if (dispatch) {
-      dispatch({ type: '@@ALIEN_STORE/REDUCER_INJECTED' });
+      dispatch({ type: REDUCER_INJECTED });
     }
   }
 
@@ -53,7 +54,7 @@ export default function manager<State>(initialReducers?: State): ReducerManager<
     delete reducerMap[key];
 
     if (dispatch) {
-      dispatch({ type: '@@ALIEN_STORE/REDUCER_REMOVED' });
+      dispatch({ type: REDUCER_REMOVED });
     }
 
     keysToRemove.push(key);

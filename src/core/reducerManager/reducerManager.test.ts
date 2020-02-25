@@ -5,6 +5,7 @@ import manager from './reducerManager';
 
 import { initialReducer, reducer1, reducer2 } from '../../utils/reducers';
 
+import { REDUCER_INJECTED, REDUCER_REMOVED } from '../../types/actionTypes';
 import { ReducerManager } from '../../types/managers';
 
 describe('manager', () => {
@@ -71,10 +72,7 @@ describe('manager', () => {
         reducer2,
       });
 
-      expect(actionsDispatched).toEqual([
-        '@@ALIEN_STORE/REDUCER_INJECTED',
-        '@@ALIEN_STORE/REDUCER_INJECTED',
-      ]);
+      expect(actionsDispatched).toEqual([REDUCER_INJECTED, REDUCER_INJECTED]);
     });
   });
 
@@ -111,10 +109,7 @@ describe('manager', () => {
 
       expect(reducerMap).toStrictEqual({});
 
-      expect(actionsDispatched).toEqual([
-        '@@ALIEN_STORE/REDUCER_REMOVED',
-        '@@ALIEN_STORE/REDUCER_REMOVED',
-      ]);
+      expect(actionsDispatched).toEqual([REDUCER_REMOVED, REDUCER_REMOVED]);
     });
 
     it('should not remove a reducer if the key does not exist on the reducerMap', () => {
