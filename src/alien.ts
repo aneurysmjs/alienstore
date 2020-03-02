@@ -11,6 +11,9 @@ function alien<R = Reducer, S = undefined>(initialReducer?: R, preloadedState?: 
   const alienManager = manager(initialReducer);
   const store: AlienStore = createReduxStore(alienManager.rootReducer, preloadedState);
   alienManager.setDispatch(store.dispatch);
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // @ts-ignore
+  alienManager.setReplaceReducer(store.replaceReducer);
   store.alienManager = alienManager;
   return store;
 }
