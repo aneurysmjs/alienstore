@@ -33,3 +33,7 @@ export interface ReduxModule<S = any> {
  * with the help of selectors.
  */
 export type AlienModule<S = any> = Omit<ReduxModule<S>, 'reducers'>;
+
+export interface ReplaceReducer<S = any> {
+  (nextReducer: Reducer<S, AnyAction>): void;
+}

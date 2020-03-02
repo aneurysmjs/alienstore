@@ -3,27 +3,30 @@ import { AnyAction, combineReducers, Dispatch, Reducer } from 'redux';
 
 import isNil from '../../utils/isNil';
 
-import { FullStoreShape, ReducerMapper, ReduxModule, AlienModule } from '../../types/alienStore';
+import {
+  FullStoreShape,
+  ReducerMapper,
+  ReduxModule,
+  AlienModule,
+  ReplaceReducer,
+} from '../../types/alienStore';
 import { REDUCER_INJECTED, REDUCER_REMOVED } from '../../types/actionTypes';
 import { ReducerManager } from '../../types/managers';
 
 type AlienDispatch = Dispatch<AnyAction> | null;
-// interface ReplaceReducer<S> {
-//   (nextReducer: Reducer<S, AnyAction>): void;
-// }
 
 export default function manager<State>(initialReducers?: State): ReducerManager<State> {
   type StoreShape = FullStoreShape<State>;
 
   type ReducerMap = ReducerMapper<StoreShape>;
 
-  type AlienReplaceReducer = (nextReducer: Reducer<StoreShape, AnyAction>) => void | null;
+  type AlienReplaceReducer = ReplaceReducer<StoreShape> | null;
 
   const fallback = (): {} => ({});
 
   let dispatch: AlienDispatch = null;
 
-  let replaceReducer: AlienReplaceReducer | null = null;
+  let replaceReducer: AlienReplaceReducer = null;
 
   const reducerMap: ReducerMap = initialReducers ? { ...initialReducers } : {};
   // @ts-ignore "combineReducers" doesn't have that overload match
@@ -75,6 +78,7 @@ export default function manager<State>(initialReducers?: State): ReducerManager<
   // this is what we give to create the Redux store
   function rootReducer(state: StoreShape, action: AnyAction): Reducer {
     let tempState = state;
+
     if (keysToRemove.length > 0) {
       tempState = { ...state };
       for (let i = 0; i < keysToRemove.length; i += 1) {
@@ -86,8 +90,7 @@ export default function manager<State>(initialReducers?: State): ReducerManager<
     // Delegate to the combined reducer
     return combinedReducer(state, action);
   }
-  // @ts-ignore
-  function setReplaceReducer(storeReplaceReducer): void {
+  function setReplaceReducer(storeReplaceReducer: ReplaceReducer): void {
     replaceReducer = storeReplaceReducer;
   }
 
@@ -121,10 +124,9 @@ export default function manager<State>(initialReducers?: State): ReducerManager<
     getReducerMap,
     injectReducers,
     removeReducers,
+    register,
     rootReducer,
     setDispatch,
-    // @ts-ignore
     setReplaceReducer,
-    register,
   };
 }

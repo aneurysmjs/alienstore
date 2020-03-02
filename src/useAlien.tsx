@@ -14,12 +14,11 @@ import { ReduxModule, AlienModule } from './types/alienStore';
 
 function useAlien<T>(reduxImports: Array<() => Promise<ReduxModule<T>>>): Array<AlienModule<T>> {
   const store = useStore() as AlienStore;
-  const {
-    // @ts-ignore
-    alienManager: { register },
-  } = store;
   const [alien, setAlien] = useState<Array<AlienModule<T>> | []>([]);
   const { result } = useLazy(reduxImports);
+  const {
+    alienManager: { register },
+  } = store;
 
   useEffect(() => {
     if (result) {
