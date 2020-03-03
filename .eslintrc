@@ -36,7 +36,14 @@
       "allowTypedFunctionExpressions": true
     }],
     "react/jsx-uses-vars": "error",
-    "quotes": ["error", "single", { "allowTemplateLiterals": true }],
+    "quotes": [
+      "error",
+      "single",
+      { 
+        "avoidEscape": true, 
+        "allowTemplateLiterals": false
+      }
+    ],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "import/no-extraneous-dependencies": [
