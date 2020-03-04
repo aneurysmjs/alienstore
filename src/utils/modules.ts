@@ -81,3 +81,5 @@ export const reduxModuleB = {
     selectorB: ({ sliceA }) => sliceA,
   },
 };
+
+export const modules = [Promise.resolve(reduxModuleA), Promise.resolve(reduxModuleB)];
