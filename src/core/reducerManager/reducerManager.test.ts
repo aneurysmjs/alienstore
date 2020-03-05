@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/ban-ts-ignore */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { createStore } from 'redux';
+import { createStore, Reducer } from 'redux';
 
 import manager from './reducerManager';
 
-import { initialReducer, reducer1, reducer2 } from '../../utils/reducers';
+import { initialReducer, reducer1, reducer2, reducerA, reducerB } from '~/utils/reducers';
+import { modules } from '~/utils/modules';
 
-import { REDUCER_INJECTED, REDUCER_REMOVED } from '../../types/actionTypes';
-import { ReducerManager } from '../../types/managers';
+import { REDUCER_INJECTED, REDUCER_REMOVED } from '~/types/actionTypes';
+import { ReducerManager } from '~/types/managers';
 
 describe('manager', () => {
   it('should return an alienManager', () => {
@@ -16,6 +18,8 @@ describe('manager', () => {
     expect(alienManager).toHaveProperty('removeReducers');
     expect(alienManager).toHaveProperty('rootReducer');
     expect(alienManager).toHaveProperty('setDispatch');
+    expect(alienManager).toHaveProperty('setReplaceReducer');
+    expect(alienManager).toHaveProperty('register');
   });
 
   describe('getReducerMap', () => {
@@ -44,7 +48,7 @@ describe('manager', () => {
     it('should inject a new reducer', () => {
       const actionsDispatched: Array<string> = [];
 
-      // highjack 'dispatch' to track actions calls
+      // hijack 'dispatch' to track actions calls
       alienManager.setDispatch(action => {
         actionsDispatched.push(action.type);
         return action.payload || null;
@@ -125,13 +129,58 @@ describe('manager', () => {
   });
 
   describe('setDispatch', () => {
-    it('should set a Redux dispatcher for internal use', () => {
+    it("should set a Store's dispatcher for internal use", () => {
       const store = createStore(() => {});
       const alienManager = manager();
       const setDispatchSpy = jest.spyOn(alienManager, 'setDispatch');
 
       alienManager.setDispatch(store.dispatch);
       expect(setDispatchSpy).toHaveBeenCalledWith(store.dispatch);
+    });
+  });
+
+  describe('setReplaceReducer', () => {
+    it('should set a Redux dispatcher for internal use', () => {
+      const store = createStore(() => {});
+      const alienManager = manager();
+      const setReplaceReducerSpy = jest.spyOn(alienManager, 'setReplaceReducer');
+
+      alienManager.setReplaceReducer(store.replaceReducer);
+      expect(setReplaceReducerSpy).toHaveBeenCalledWith(store.replaceReducer);
+    });
+  });
+
+  describe('register', () => {
+    let alienManager = {} as ReducerManager;
+
+    beforeEach(() => {
+      alienManager = manager();
+    });
+    it('should inject reducers for each redux module in the array', () => {
+      const replaceReducerCalls: Array<Reducer> = [];
+
+      alienManager.setReplaceReducer(reducer => {
+        replaceReducerCalls.push(reducer);
+      });
+
+      const actionsDispatched: Array<string> = [];
+
+      alienManager.setDispatch(action => {
+        actionsDispatched.push(action.type);
+        return action.payload || null;
+      });
+
+      const { register, getReducerMap, rootReducer } = alienManager;
+
+      // @ts-ignore
+      register(modules);
+
+      const reducerMap = getReducerMap();
+
+      expect(reducerMap).toStrictEqual({ stateA: reducerA, stateB: reducerB });
+      expect(replaceReducerCalls).toStrictEqual([rootReducer, rootReducer]);
+
+      expect(actionsDispatched).toEqual([REDUCER_INJECTED, REDUCER_INJECTED]);
     });
   });
 });
