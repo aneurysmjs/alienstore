@@ -3,6 +3,8 @@ import { AnyAction } from 'redux';
 
 import { reducer1, reducerA, reducerB } from './reducers';
 
+import { ReduxModule } from '~/types/alienStore';
+
 export const reduxModule = {
   id: 'redux-module-id',
   reducers: {
@@ -31,6 +33,7 @@ export const reduxModuleNoId = {
     }),
   },
 };
+
 export const reduxModuleNoReducers = {
   id: 'reduxModuleNoReducers',
   reducers: {},
@@ -44,7 +47,11 @@ export const reduxModuleNoReducers = {
   },
 };
 
-export const reduxModuleA = {
+interface StateReduxModuleA {
+  stateA: string;
+}
+
+export const reduxModuleA: ReduxModule<StateReduxModuleA> = {
   id: 'reduxModuleA',
   reducers: {
     stateA: reducerA,
@@ -58,8 +65,7 @@ export const reduxModuleA = {
     }),
   },
   selectors: {
-    // @ts-ignore
-    selectorA: ({ sliceA }) => sliceA,
+    selectorA: state => state,
   },
 };
 
@@ -82,4 +88,4 @@ export const reduxModuleB = {
   },
 };
 
-export const modules = [Promise.resolve(reduxModuleA), Promise.resolve(reduxModuleB)];
+export const modules = [reduxModuleA, reduxModuleB];

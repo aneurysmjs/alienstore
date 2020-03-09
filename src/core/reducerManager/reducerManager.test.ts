@@ -1,11 +1,14 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { createStore, Reducer } from 'redux';
+import { createStore } from 'redux';
 
 import manager from './reducerManager';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// @ts-ignore
 import { initialReducer, reducer1, reducer2, reducerA, reducerB } from '~/utils/reducers';
-import { modules } from '~/utils/modules';
+import { modules, reduxModuleNoReducers, reduxModuleNoId } from '~/utils/modules';
 
 import { REDUCER_INJECTED, REDUCER_REMOVED } from '~/types/actionTypes';
 import { ReducerManager } from '~/types/managers';
@@ -157,10 +160,10 @@ describe('manager', () => {
       alienManager = manager();
     });
     it('should inject reducers for each redux module in the array', () => {
-      const replaceReducerCalls: Array<Reducer> = [];
+      let replaceReducerCalls = 0;
 
-      alienManager.setReplaceReducer(reducer => {
-        replaceReducerCalls.push(reducer);
+      alienManager.setReplaceReducer(() => {
+        replaceReducerCalls += 1;
       });
 
       const actionsDispatched: Array<string> = [];
@@ -170,7 +173,7 @@ describe('manager', () => {
         return action.payload || null;
       });
 
-      const { register, getReducerMap, rootReducer } = alienManager;
+      const { register, getReducerMap } = alienManager;
 
       // @ts-ignore
       register(modules);
@@ -178,9 +181,46 @@ describe('manager', () => {
       const reducerMap = getReducerMap();
 
       expect(reducerMap).toStrictEqual({ stateA: reducerA, stateB: reducerB });
-      expect(replaceReducerCalls).toStrictEqual([rootReducer, rootReducer]);
+      expect(replaceReducerCalls).toEqual(2);
 
       expect(actionsDispatched).toEqual([REDUCER_INJECTED, REDUCER_INJECTED]);
+    });
+
+    it('should throw when redux module has no id', () => {
+      let replaceReducerCalls = 0;
+
+      alienManager.setReplaceReducer(() => {
+        replaceReducerCalls += 1;
+      });
+
+      const { register } = alienManager;
+
+      const brokenModules = [reduxModuleNoId];
+
+      expect(() => {
+        // @ts-ignore
+        register(brokenModules);
+      }).toThrow(Error('Redux Module has no id'));
+
+      expect(replaceReducerCalls).toEqual(0);
+    });
+
+    it('should throw when redux module has no reducers', () => {
+      let replaceReducerCalls = 0;
+
+      alienManager.setReplaceReducer(() => {
+        replaceReducerCalls += 1;
+      });
+
+      const { register } = alienManager;
+
+      const brokenModules = [reduxModuleNoReducers];
+
+      expect(() => {
+        register(brokenModules);
+      }).toThrow(Error('Redux Module has no reducers'));
+
+      expect(replaceReducerCalls).toEqual(0);
     });
   });
 });
