@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 import { AnyAction, combineReducers, Dispatch, Reducer } from 'redux';
 
-import isNil from '../../utils/isNil';
+import isNil from '~/utils/isNil';
 
 import {
   FullStoreShape,
@@ -9,9 +9,9 @@ import {
   ReduxModule,
   AlienModule,
   ReplaceReducer,
-} from '../../types/alienStore';
-import { REDUCER_INJECTED, REDUCER_REMOVED } from '../../types/actionTypes';
-import { ReducerManager } from '../../types/managers';
+} from '~/types/alienStore';
+import { REDUCER_INJECTED, REDUCER_REMOVED } from '~/types/actionTypes';
+import { ReducerManager } from '~/types/managers';
 
 type AlienDispatch = Dispatch<AnyAction> | null;
 
