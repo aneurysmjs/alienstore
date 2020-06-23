@@ -1,12 +1,12 @@
-import nodeResolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import replace from 'rollup-plugin-replace';
-import typescript from 'rollup-plugin-typescript2';
+import nodeResolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import replace from '@rollup/plugin-replace';
+import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 
 import pkg from './package.json';
 
-const noDeclarationFiles = { compilerOptions: { declaration: false } };
+const tsOptions = { declaration: false };
 
 const external = [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})];
 
@@ -36,7 +36,7 @@ export default [
       nodeResolve({
         extensions: ['.tsx'],
       }),
-      typescript({ tsconfigOverride: noDeclarationFiles }),
+      typescript({ ...tsOptions }),
     ],
   },
   // ES for Browsers
@@ -59,7 +59,7 @@ export default [
       replace({
         'process.env.NODE_ENV': JSON.stringify('production'),
       }),
-      typescript({ tsconfigOverride: noDeclarationFiles }),
+      typescript({ ...tsOptions }),
       terser({
         compress: {
           pure_getters: true,
@@ -90,7 +90,7 @@ export default [
       nodeResolve({
         extensions: ['.tsx']
       }),
-      typescript({ tsconfigOverride: noDeclarationFiles }),
+      typescript({ ...tsOptions }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('development')
       })
@@ -117,7 +117,7 @@ export default [
       nodeResolve({
         extensions: ['.tsx'],
       }),
-      typescript({ tsconfigOverride: noDeclarationFiles }),
+      typescript({ ...tsOptions }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production'),
       }),
