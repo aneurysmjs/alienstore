@@ -24,4 +24,11 @@ module.exports = {
   transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|ts|tsx)$'],
   moduleDirectories: paths.resolveModules,
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'jsx', 'node', 'mjs'],
+  globals: {
+    'ts-jest': {
+      diagnostics: {
+        warnOnly: true
+      }
+    }
+  }
 };
