@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
 import { useEffect, useState } from 'react';
 import { useStore } from 'react-redux';
 import useLazy from 'uselazy';
@@ -28,7 +27,7 @@ function useAlien<T>(reduxImports: Array<() => Promise<ReduxModule<T>>>): Array<
          */
         const alienModules = register(result);
 
-        setAlien(prevAlienModules => [...prevAlienModules, ...alienModules]);
+        setAlien((prevAlienModules) => [...prevAlienModules, ...alienModules]);
       } catch (error) {
         setAlien(error);
       }
