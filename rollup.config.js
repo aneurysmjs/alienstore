@@ -28,11 +28,7 @@ export default [
     },
     external,
     plugins: [
-      commonjs({
-        namedExports: {
-          react: ['useEffect', 'useState']
-        }
-      }),
+      commonjs(),
       nodeResolve({
         extensions: ['.tsx'],
       }),
@@ -48,11 +44,7 @@ export default [
      },
     external,
     plugins: [
-      commonjs({
-        namedExports: {
-          react: ['useEffect', 'useState']
-        }
-      }),
+      commonjs(),
       nodeResolve({
         extensions: ['.tsx'],
       }),
@@ -82,11 +74,7 @@ export default [
     },
     external,
     plugins: [
-      commonjs({
-        namedExports: {
-          react: ['useEffect', 'useState']
-        }
-      }),
+      commonjs(),
       nodeResolve({
         extensions: ['.tsx']
       }),
@@ -109,11 +97,7 @@ export default [
     },
     external,
     plugins: [
-      commonjs({
-        namedExports: {
-          react: ['useEffect', 'useState']
-        }
-      }),
+      commonjs(),
       nodeResolve({
         extensions: ['.tsx'],
       }),
