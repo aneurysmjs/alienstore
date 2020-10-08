@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Reducer, ActionCreator, AnyAction } from 'redux';
-
-// get the return value if T is a function
-export type Unpack<T> = T extends (...args: any[]) => infer R ? R : any;
+import {
+  Reducer,
+  AnyAction,
+  ReducersMapObject,
+  ActionCreatorsMapObject,
+  ActionFromReducersMapObject,
+  StateFromReducersMapObject,
+} from 'redux';
 
 // mapped the types of the reducers to produce state's shape type
 export type FullStoreShape<T> = {
-  [K in keyof T]?: T[K] extends Function ? Unpack<T[K]> : never;
+  [K in keyof T]?: T[K] extends () => any ? ReturnType<T[K]> : never;
 };
 
 export type ReducerMapper<U> = Partial<{ [K in keyof Partial<U>]: Reducer<U[K]> }>;
@@ -14,14 +18,10 @@ export type ReducerMapper<U> = Partial<{ [K in keyof Partial<U>]: Reducer<U[K]> 
 /**
  * Every piece of the state its considered a Redux module.
  */
-export interface ReduxModule<S = any> {
+export interface ReduxModule<R extends ReducersMapObject<any, any> = ReducersMapObject<any, any>> {
   id: string;
-  reducers: {
-    [K: string]: Reducer<S>;
-  };
-  actions: {
-    [K: string]: ActionCreator<AnyAction>;
-  };
+  reducers: ReducersMapObject<StateFromReducersMapObject<R>, ActionFromReducersMapObject<R>>;
+  actions: ActionCreatorsMapObject<ActionFromReducersMapObject<R>>;
   selectors?: {
     [K: string]: <S, R>(state: S) => R;
   };
